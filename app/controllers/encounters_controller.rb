@@ -14,7 +14,8 @@ class EncountersController < ApplicationController
       observation[:encounter_id] = encounter.id
       Observation.create(observation)
     }
-    redirect_to "/patients/show/#{params[:encounter][:patient_id]}"
+    redirect_to "/encounters/print/?id=#{params[:encounter][:patient_id]}"
+    # redirect_to "/patients/show/#{params[:encounter][:patient_id]}"
   end
 
   def new
@@ -59,5 +60,18 @@ class EncountersController < ApplicationController
     locations =  Location.find(:all, :select =>'name', :conditions => ["retired = 0 AND name LIKE ?", '%' + search_string + '%'])
     render :text => "<li>" + locations.map{|location| location.name }.join("</li><li>") + "</li>"
   end
+
+  def print
+    @patient = Patient.find(params[:id] || session[:patient_id]) rescue nil
+    # raise @patient.to_yaml
+    print_and_redirect("/encounters/print_encounter/?patient_id=#{@patient.patient_id}", next_task(@patient))  
+  end
+  
+  def print_encounter
+    raise 'my mom is waaay cooler than your mom'
+    print_string = Patient.find(params[:patient_id]).visit_label rescue (raise "Unable to find patient (#{params[:patient_id]}) or generate a encounter label for that patient")
+    send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false, :filename=>"#{params[:patient_id]}#{rand(10000)}.lbl", :disposition => "inline")
+  end
+
 
 end
