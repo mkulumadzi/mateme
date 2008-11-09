@@ -1,4 +1,4 @@
-class BartSpecModelGenerator < Rails::Generator::NamedBase
+class SimpleSpecModelGenerator < Rails::Generator::NamedBase
 
   def initialize(runtime_args, runtime_options = {})
     super    
@@ -17,7 +17,7 @@ class BartSpecModelGenerator < Rails::Generator::NamedBase
   protected
     # Override with your own usage banner.
     def banner
-      "Usage: #{$0} bart_spec_model ModelName"
+      "Usage: #{$0} simple_spec_model [ModelName|table_name]"
     end
     
     def actual_table_name
