@@ -37,20 +37,4 @@ class Encounter < ActiveRecord::Base
     encounters_by_type
   end
  
-  def encounter_label
-    return unless self.national_id
-    sex =  self.person.gender.match(/F/i) ? "(F)" : "(M)"
-    address = self.person.address.strip[0..24].humanize.delete("'") rescue ""
-    label = ZebraPrinter::StandardLabel.new
-    label.font_size = 1
-    label.font_horizontal_multiplier = 1
-    label.font_vertical_multiplier = 1
-    label.left_margin = 50
-    label.draw_multi_text("#{self.person.name.titleize.delete("'")}") #'
-    label.draw_multi_text("#{self.national_id_with_dashes} #{self.person.birthdate_formatted}#{sex}")
-    label.draw_multi_text("#{address}")
-    label.draw_multi_text("#{self.encounter.encounter_datetime.titleize.delete("'")}") #'
-    label.print(1)
-  end
-
 end

@@ -63,7 +63,6 @@ class EncountersController < ApplicationController
 
   def print
     @patient = Patient.find(params[:id] || session[:patient_id]) rescue nil
-    # raise @patient.to_yaml
     print_and_redirect("/encounters/print_encounter/?patient_id=#{@patient.patient_id}", next_task(@patient))  
   end
   
